@@ -29,11 +29,18 @@ from backend.app.services.detection_engine import DetectionEngine
 from backend.app.services.risk_engine import RiskScoringEngine
 
 
-async def seed_data(target_events_count: int = 10000):
-    print("[INFO] Initializing CyberRange Database Seeder...")
+async def seed_data(target_events_count: int = 500):
     await init_db()
 
     async with AsyncSessionLocal() as session:
+        # Check if already seeded to prevent duplicate runs
+        rules_count = (await session.execute(select(func.count(DetectionRule.id)))).scalar_one() or 0
+        incidents_count = (await session.execute(select(func.count(Incident.id)))).scalar_one() or 0
+        if rules_count >= 20 and incidents_count > 0:
+            print("[INFO] Database already initialized with rules and sample incidents. Skipping full seed.")
+            return
+
+        print("[INFO] Initializing CyberRange Database Seeder...")
         # 1. Seed Users
         print("[INFO] Seeding SOC Users...")
         users_data = [

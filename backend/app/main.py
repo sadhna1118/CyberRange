@@ -1,4 +1,5 @@
 import time
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -51,16 +52,20 @@ async def seed_initial_admin():
             print("[INFO] Seeded default SOC admin user (admin / CyberRange2026!)")
 
 
+async def run_background_seed():
+    try:
+        from scripts.seed_database import seed_data
+        await seed_data(500)
+    except Exception as e:
+        print(f"[INFO] Background seed status: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
     await seed_initial_admin()
-    try:
-        from scripts.seed_database import seed_data
-        await seed_data()
-    except Exception as e:
-        print(f"[INFO] Initial seed status: {e}")
+    asyncio.create_task(run_background_seed())
     yield
     # Shutdown
 
