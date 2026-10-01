@@ -18,13 +18,11 @@ COPY detection-rules ./detection-rules
 COPY data ./data
 COPY scripts ./scripts
 
-# Seed database on build
-RUN python scripts/seed_database.py
-
 EXPOSE 8000
 
 ENV ENVIRONMENT=production
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 # Use $PORT provided by Render/Cloud platforms (defaults to 8000 if not set)
 CMD ["sh", "-c", "python -m uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -56,6 +56,11 @@ async def lifespan(app: FastAPI):
     # Startup
     await init_db()
     await seed_initial_admin()
+    try:
+        from scripts.seed_database import seed_data
+        await seed_data()
+    except Exception as e:
+        print(f"[INFO] Initial seed status: {e}")
     yield
     # Shutdown
 
