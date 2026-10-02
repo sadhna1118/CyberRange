@@ -105,6 +105,11 @@ async def security_and_timing_middleware(request: Request, call_next):
 
 
 # Health & Observability Endpoints
+@app.get("/", tags=["Observability"])
+async def root():
+    return {"status": "online", "message": "CyberRange API is running"}
+
+
 @app.get("/health", tags=["Observability"])
 async def health_check():
     return {
