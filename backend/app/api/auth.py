@@ -61,12 +61,6 @@ async def get_current_user(
     )
 
     if not jwt_token:
-        # Fallback guest user for seamless dev/lab inspection if token absent
-        stmt = select(User).where(User.username == "admin")
-        res = await db.execute(stmt)
-        user = res.scalar_one_or_none()
-        if user:
-            return user
         raise credentials_exception
 
     try:
