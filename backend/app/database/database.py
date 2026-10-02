@@ -10,10 +10,14 @@ connect_args = {}
 db_url = settings.DATABASE_URL
 
 # Auto-convert standard postgres urls to asyncpg
-if db_url.startswith("postgres://"):
+if db_url.startswith("postgres://") or db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
-elif db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    
+    # Clean up query params that asyncpg might not support (like channel_binding)
+    if "?" in db_url:
+        db_url = db_url.split("?")[0]
+    db_url += "?ssl=require"
 
 if "sqlite" in db_url:
     connect_args = {"check_same_thread": False}
