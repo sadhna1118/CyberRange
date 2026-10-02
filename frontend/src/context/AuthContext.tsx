@@ -17,14 +17,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(localStorage.getItem("cyberrange_token"));
   const [user, setUser] = useState<User | null>(() => {
     const cached = localStorage.getItem("cyberrange_user");
-    return cached ? JSON.parse(cached) : {
-      id: "usr-admin",
-      username: "admin",
-      email: "admin@cyberrange.lab",
-      role: "ADMIN",
-      full_name: "SOC Administrator",
-      is_active: true,
-    };
+    return cached ? JSON.parse(cached) : null;
   });
 
   const login = (newToken: string, newUser: User) => {
@@ -53,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         login,
         logout,
-        isAuthenticated: !!user,
+        isAuthenticated: !!user && !!token,
         hasRole,
       }}
     >
