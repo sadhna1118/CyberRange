@@ -343,7 +343,7 @@ async def seed_data(target_events_count: int = 500):
                     incident_id=incident.id,
                     evidence_type="log",
                     description=f"Auth log capture for adversary IP {src_ip}",
-                    sha256_hash=f"{inc_idx:04x}a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef",
+                    sha256_hash=f"{inc_idx:04x}a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789ab",
                     collected_by="lead_analyst",
                 )
                 session.add(ev)
