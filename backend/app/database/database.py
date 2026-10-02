@@ -21,12 +21,17 @@ if db_url.startswith("postgres://") or db_url.startswith("postgresql://"):
 
 if "sqlite" in db_url:
     connect_args = {"check_same_thread": False}
+elif "asyncpg" in db_url:
+    # Required for Neon/PgBouncer poolers
+    connect_args = {"statement_cache_size": 0}
 
 engine = create_async_engine(
     db_url,
     echo=False,
     future=True,
     connect_args=connect_args,
+    pool_pre_ping=True,
+    pool_recycle=300,
 )
 
 AsyncSessionLocal = async_sessionmaker(
