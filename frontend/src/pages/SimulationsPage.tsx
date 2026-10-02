@@ -264,7 +264,7 @@ export default function SimulationsPage() {
                       <div className="flex flex-wrap gap-1">
                         {scenario.stages.map((st, i) => (
                           <span key={i} className="text-[10px] bg-slate-950 px-2 py-0.5 rounded text-slate-300 font-mono border border-slate-800">
-                            {st.name || st}
+                            {typeof st === 'string' ? st : (st.name || 'Stage ' + (i + 1))}
                           </span>
                         ))}
                       </div>

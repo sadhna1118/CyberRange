@@ -119,14 +119,15 @@ class SimulationService:
 
         stages = scenario.get("stages", [])
         for stage in stages:
-            stage_name = stage.get("name", "Unknown Stage")
+            stage_name = stage if isinstance(stage, str) else stage.get("name", "Unknown Stage")
             execution_log.append({
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "stage": stage_name,
                 "status": "EXECUTING",
             })
-
-            for ev_template in stage.get("events", []):
+            
+            events = [] if isinstance(stage, str) else stage.get("events", [])
+            for ev_template in events:
                 repeat_count = ev_template.get("repeat", 1)
                 for _ in range(repeat_count):
                     # Build event payload
