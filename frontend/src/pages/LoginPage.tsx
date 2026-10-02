@@ -66,6 +66,7 @@ export const LoginPage: React.FC = () => {
                 <input
                   type="text"
                   required
+                  autoComplete="off"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-slate-900/90 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono"
@@ -83,6 +84,7 @@ export const LoginPage: React.FC = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-slate-900/90 border border-slate-700 rounded-lg pl-10 pr-10 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 font-mono"
