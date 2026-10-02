@@ -16,8 +16,6 @@ RUN pip install --no-cache-dir -r ./backend/requirements.txt
 COPY backend ./backend
 COPY detection-rules ./detection-rules
 COPY data ./data
-COPY scripts ./scripts
-
 EXPOSE 8000
 
 ENV ENVIRONMENT=production
