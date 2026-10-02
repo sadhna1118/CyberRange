@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # Security & JWT
-    JWT_SECRET: str = "cyberrange-default-dev-secret-key-change-in-production-128bits"
+    JWT_SECRET: str = os.getenv("JWT_SECRET", os.urandom(32).hex())
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRATION_MINUTES: int = 480
 

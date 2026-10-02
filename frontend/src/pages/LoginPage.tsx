@@ -5,8 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import { ApiService } from "../services/api";
 
 export const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("CyberRange2026!");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,10 +28,7 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const quickSwitch = (user: string, pw: string) => {
-    setUsername(user);
-    setPassword(pw);
-  };
+
 
   return (
     <div className="min-h-screen bg-[#0a0d14] flex flex-col justify-center items-center p-4 relative overflow-hidden">
@@ -111,46 +108,7 @@ export const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick Preset Accounts */}
-          <div className="mt-6 pt-6 border-t border-slate-800">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 text-center mb-3">
-              Quick Role Switch (Lab Preset)
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => quickSwitch("admin", "CyberRange2026!")}
-                className="p-2 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 flex items-center justify-between"
-              >
-                <span>Admin</span>
-                <span className="text-[10px] text-cyan-400 font-mono">Full</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => quickSwitch("lead_analyst", "Analyst2026!")}
-                className="p-2 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-purple-500/40 text-slate-300 flex items-center justify-between"
-              >
-                <span>Lead Analyst</span>
-                <span className="text-[10px] text-purple-400 font-mono">Tier 3</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => quickSwitch("hunter_sarah", "Analyst2026!")}
-                className="p-2 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-slate-300 flex items-center justify-between"
-              >
-                <span>Hunter Sarah</span>
-                <span className="text-[10px] text-amber-400 font-mono">Hunt</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => quickSwitch("auditor_bob", "Viewer2026!")}
-                className="p-2 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 flex items-center justify-between"
-              >
-                <span>Auditor Bob</span>
-                <span className="text-[10px] text-emerald-400 font-mono">Viewer</span>
-              </button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

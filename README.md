@@ -221,7 +221,7 @@ $$\text{Risk Score} = \min\left(100, \text{Severity Weight} + \text{Confidence W
 
 ## 🕵️ 8. 5-Minute Investigation Walkthrough
 
-1. **Authentication**: Sign in to `http://localhost:3000` with username `admin` / password `CyberRange2026!`.
+1. **Authentication**: Configure the `.env` file with `ADMIN_USERNAME` and `ADMIN_PASSWORD` before starting the backend, and use those credentials to sign in to `http://localhost:3000`.
 2. **Dashboard Overview**: Inspect baseline telemetry from 10,000+ normalized events, real-time alert distribution charts, and MTTA/MTTR metrics.
 3. **Trigger Simulation**: Navigate to **Attack Simulation Lab** and click **Run Simulation** on `SCENARIO-007 (Multi-Stage Intrusion)`.
 4. **Live Detection**: Observe real-time WebSocket alert notifications firing as reconnaissance, authentication, execution, privilege escalation, and exfiltration stages progress.

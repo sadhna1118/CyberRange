@@ -1,5 +1,6 @@
 import time
 import asyncio
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,31 +34,30 @@ settings = get_settings()
 
 
 async def seed_initial_admin():
-    """Ensures a default SOC administrator account exists on startup."""
+    """Ensures a default SOC administrator account exists on startup if env vars are provided."""
+    admin_user = os.getenv("ADMIN_USERNAME")
+    admin_pass = os.getenv("ADMIN_PASSWORD")
+    
+    if not admin_user or not admin_pass:
+        print("[WARNING] No ADMIN_USERNAME or ADMIN_PASSWORD set. Skipping default admin creation.")
+        return
+
     async with AsyncSessionLocal() as session:
-        stmt = select(User).where(User.username == "admin")
+        stmt = select(User).where(User.username == admin_user)
         res = await session.execute(stmt)
         admin = res.scalar_one_or_none()
         if not admin:
             admin = User(
-                username="admin",
-                email="admin@cyberrange.lab",
-                hashed_password=get_password_hash("CyberRange2026!"),
+                username=admin_user,
+                email=f"{admin_user}@cyberrange.lab",
+                hashed_password=get_password_hash(admin_pass),
                 role="ADMIN",
                 full_name="SOC Administrator",
                 is_active=True,
             )
             session.add(admin)
             await session.commit()
-            print("[INFO] Seeded default SOC admin user (admin / CyberRange2026!)")
-
-
-async def run_background_seed():
-    try:
-        from scripts.seed_database import seed_data
-        await seed_data(500)
-    except Exception as e:
-        print(f"[INFO] Background seed status: {e}")
+            print(f"[INFO] Seeded default SOC admin user ({admin_user}) from environment.")
 
 
 @asynccontextmanager
@@ -65,7 +65,6 @@ async def lifespan(app: FastAPI):
     # Startup
     await init_db()
     await seed_initial_admin()
-    asyncio.create_task(run_background_seed())
     yield
     # Shutdown
 
