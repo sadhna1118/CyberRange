@@ -9,6 +9,8 @@ settings = get_settings()
 connect_args = {}
 db_url = settings.DATABASE_URL
 
+from sqlalchemy.pool import NullPool
+
 # Auto-convert standard postgres urls to asyncpg
 if db_url.startswith("postgres://") or db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
@@ -19,19 +21,22 @@ if db_url.startswith("postgres://") or db_url.startswith("postgresql://"):
         db_url = db_url.split("?")[0]
     db_url += "?ssl=require"
 
+engine_kwargs = {
+    "echo": False,
+    "future": True,
+}
+
 if "sqlite" in db_url:
-    connect_args = {"check_same_thread": False}
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
 elif "asyncpg" in db_url:
     # Required for Neon/PgBouncer poolers
-    connect_args = {"statement_cache_size": 0}
+    engine_kwargs["connect_args"] = {"statement_cache_size": 0}
+    # Disable SQLAlchemy pooling because Neon's PgBouncer already pools
+    engine_kwargs["poolclass"] = NullPool
 
 engine = create_async_engine(
     db_url,
-    echo=False,
-    future=True,
-    connect_args=connect_args,
-    pool_pre_ping=True,
-    pool_recycle=300,
+    **engine_kwargs
 )
 
 AsyncSessionLocal = async_sessionmaker(
